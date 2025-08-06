@@ -1,11 +1,11 @@
 {
   "version": 2,
   "builds": [{
-    "src": "build.sh",
-    "use": "@vercel/static-build",
+    "src": "app.py",
+    "use": "@vercel/python",
     "config": {
-      "distDir": ".",
-      "pythonVersion": "3.10"
+      "pythonVersion": "3.10",
+      "installCommand": "python -m pip install --upgrade pip && pip install -r requirements.txt"
     }
   }],
   "routes": [{
