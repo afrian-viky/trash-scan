@@ -2,8 +2,9 @@ Flask==2.3.2
 flask-cors==4.0.0
 tensorflow-cpu==2.19.0
 Pillow==10.0.0
-numpy==1.24.3
+numpy==1.26.4  # Versi stabil terbaru
 supabase==2.3.0
 python-dotenv==1.0.0
 gdown==4.7.1
-setuptools==65.5.1  # Versi yang stabil dengan Python 3.10
+setuptools==68.2.2
+wheel==0.41.3
