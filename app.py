@@ -14,7 +14,7 @@ from supabase import create_client, Client
 import json
 import gzip
 import shutil
-import gdown
+import requests
 
 # Load environment variables from .env file (optional)
 try:
@@ -92,16 +92,40 @@ def get_authenticated_supabase_client(user_uid):
         return None
 
 # Load model
+import os
+import requests
+from tensorflow.keras.models import load_model
+
+def download_from_google_drive(file_id, dest_path):
+    print("⬇️ Downloading model using requests...")
+    URL = "https://drive.google.com/uc?export=download"
+
+    session = requests.Session()
+    response = session.get(URL, params={'id': file_id}, stream=True)
+
+    token = None
+    for key, value in response.cookies.items():
+        if key.startswith('download_warning'):
+            token = value
+            break
+
+    if token:
+        response = session.get(URL, params={'id': file_id, 'confirm': token}, stream=True)
+
+    with open(dest_path, "wb") as f:
+        for chunk in response.iter_content(32768):
+            if chunk:
+                f.write(chunk)
+
+    print("✅ Model downloaded.")
+
 def load_model_from_drive():
     MODEL_PATH = "best_model.h5"
-    FILE_ID = "1EW4wiNPtZKl2iLAmV0SjMs6OFPBXB8OR"  # Ganti dengan ID model-mu
+    FILE_ID = "1EW4wiNPtZKl2iLAmV0SjMs6OFPBXB8OR"
 
     if not os.path.exists(MODEL_PATH):
-        print("⏳ Downloading model from Google Drive...")
         try:
-            import gdown
-            gdown.download(id=FILE_ID, output=MODEL_PATH, quiet=False)
-            print("✅ Model downloaded!")
+            download_from_google_drive(FILE_ID, MODEL_PATH)
         except Exception as e:
             print(f"❌ Failed to download model: {e}")
             raise
