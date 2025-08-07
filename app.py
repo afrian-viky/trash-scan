@@ -12,6 +12,9 @@ import threading
 import os
 from supabase import create_client, Client
 import json
+import gzip
+import shutil
+import gdown
 
 # Load environment variables from .env file (optional)
 try:
@@ -89,7 +92,23 @@ def get_authenticated_supabase_client(user_uid):
         return None
 
 # Load model
-model = load_model('best_model.h5')
+def load_model_from_drive():
+    MODEL_PATH = "best_model.h5"
+    if not os.path.exists(MODEL_PATH):
+        print("⏳ Downloading model from Google Drive...")
+        FILE_ID = "1EW4wiNPtZKl2iLAmV0SjMs6OFPBXB8OR"  # Ganti dengan ID file Anda
+        MODEL_URL = f"https://drive.google.com/uc?id={FILE_ID}&confirm=t"
+        try:
+            gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+            print("✅ Model downloaded!")
+        except Exception as e:
+            print(f"❌ Failed to download model: {e}")
+            raise
+    return load_model(MODEL_PATH)
+
+print("⏳ Loading model...")
+model = load_model_from_drive()
+print("✅ Model loaded successfully!")
 
 class_names = [
     'Baterai', 'Daun', 'Elektronik', 'Kaca', 'Kardus',
