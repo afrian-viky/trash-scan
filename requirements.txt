@@ -1,8 +1,9 @@
 Flask==2.3.2
 flask-cors==4.0.0
 tensorflow-cpu==2.19.0
+numpy==1.26.4
 Pillow==10.0.0
-numpy==1.26.4  
 supabase==2.3.0
 python-dotenv==1.0.0
 gdown==4.7.1
+--no-build-isolation
