@@ -94,12 +94,13 @@ def get_authenticated_supabase_client(user_uid):
 # Load model
 def load_model_from_drive():
     MODEL_PATH = "best_model.h5"
+    FILE_ID = "1EW4wiNPtZKl2iLAmV0SjMs6OFPBXB8OR"  # Ganti dengan ID model-mu
+
     if not os.path.exists(MODEL_PATH):
         print("⏳ Downloading model from Google Drive...")
-        FILE_ID = "1EW4wiNPtZKl2iLAmV0SjMs6OFPBXB8OR"  # Ganti dengan ID file Anda
-        MODEL_URL = f"https://drive.google.com/uc?id={FILE_ID}&confirm=t"
         try:
-            gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
+            import gdown
+            gdown.download(id=FILE_ID, output=MODEL_PATH, quiet=False)
             print("✅ Model downloaded!")
         except Exception as e:
             print(f"❌ Failed to download model: {e}")
