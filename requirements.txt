@@ -6,4 +6,3 @@ Pillow==10.0.0
 supabase==2.3.0
 python-dotenv==1.0.0
 gdown==4.7.1
---no-build-isolation
