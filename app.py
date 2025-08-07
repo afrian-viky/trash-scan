@@ -48,27 +48,22 @@ ip_usage_tracker = defaultdict(list)
 ip_lock = threading.Lock()
 MAX_ANONYMOUS_UPLOADS = 3
 
-# Model loading with compression handling
-def load_compressed_model():
+def load_model_from_drive():
     MODEL_PATH = "best_model.h5"
-    COMPRESSED_PATH = "best_model.h5.gz"
-    
     if not os.path.exists(MODEL_PATH):
-        if os.path.exists(COMPRESSED_PATH):
-            print("⏳ Decompressing model file...")
-            with gzip.open(COMPRESSED_PATH, 'rb') as f_in:
-                with open(MODEL_PATH, 'wb') as f_out:
-                    shutil.copyfileobj(f_in, f_out)
-        else:
-            # Alternatif: Download dari Google Drive jika diperlukan
-            MODEL_URL = "https://drive.google.com/file/d/1sdxe5h9HL5-GcUb24w3ljLH_vIBtgMmE/view?usp=drive_link"  # Ganti dengan ID Anda
-            print("⏳ Downloading model file...")
+        print("⏳ Downloading model from Google Drive...")
+        FILE_ID = "1EW4wiNPtZKl2iLAmV0SjMs6OFPBXB8OR"  # Ganti dengan ID file Anda
+        MODEL_URL = f"https://drive.google.com/uc?id={FILE_ID}&confirm=t"
+        try:
             gdown.download(MODEL_URL, MODEL_PATH, quiet=False)
-    
+            print("✅ Model downloaded!")
+        except Exception as e:
+            print(f"❌ Failed to download model: {e}")
+            raise
     return load_model(MODEL_PATH)
 
 print("⏳ Loading model...")
-model = load_compressed_model()
+model = load_model_from_drive()
 print("✅ Model loaded successfully!")
 
 # Data definitions
